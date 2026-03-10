@@ -27,7 +27,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
   && rm -rf /var/lib/apt/lists/*
 
 # Pin OpenClaw version for reproducible builds — bump explicitly when upgrading
-ARG OPENCLAW_VERSION=2026.2.6-3
+ARG OPENCLAW_VERSION=2026.3.8
 RUN npm install -g openclaw@${OPENCLAW_VERSION}
 
 # Install ClawHub CLI for skill management
@@ -42,6 +42,24 @@ COPY config/skills-manifest.txt /opt/config/skills-manifest.txt
 COPY workspace-templates/ /opt/workspace-templates/
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
+# Pre-install extension dependencies at build time (optional, space-separated)
+# Example: OPENCLAW_EXTENSIONS="diagnostics-otel matrix"
+ARG OPENCLAW_EXTENSIONS=""
+RUN if [ -n "$OPENCLAW_EXTENSIONS" ]; then \
+      OC_ROOT=$(npm root -g)/openclaw && \
+      for ext in $OPENCLAW_EXTENSIONS; do \
+        ext_dir="$OC_ROOT/extensions/$ext"; \
+        if [ -f "$ext_dir/package.json" ]; then \
+          echo "[build] Installing deps for extension: $ext"; \
+          cd "$ext_dir" && npm install --omit=dev 2>/dev/null || true; \
+        fi; \
+      done; \
+    fi
+
 USER node
+
+# Container health check (added in OpenClaw 2026.3.1)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:18789/healthz || exit 1
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
