@@ -9,7 +9,6 @@
       "enabled": true,
       "botToken": "${TELEGRAM_BOT_TOKEN}",
       "dmPolicy": "pairing",
-      "groupPolicy": "allowlist",
       "streaming": "partial"
     }
   },

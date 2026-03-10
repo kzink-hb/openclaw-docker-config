@@ -10,7 +10,7 @@ yt
 agent-browser
 
 # System Monitor — CPU/RAM/GPU status check from Telegram
-system-monitor
+system-resource-monitor
 
 # Conventional Commits — format commit messages properly
 conventional-commits
