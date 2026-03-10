@@ -31,7 +31,7 @@ if [[ -f "$MANIFEST" ]]; then
     fi
 
     echo "[entrypoint]   → installing $line"
-    clawhub install "$line" --workdir "$WORKDIR" || {
+    clawhub install "$line" --workdir "$WORKDIR" --force || {
       echo "[entrypoint] WARNING: Failed to install $line — continuing"
     }
   done < "$MANIFEST"
