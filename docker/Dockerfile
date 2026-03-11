@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     ca-certificates \
     gnupg \
+    jq \
+    ripgrep \
     tini \
   && rm -rf /var/lib/apt/lists/*
 
@@ -26,12 +28,19 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
   && apt-get update && apt-get install -y --no-install-recommends gh \
   && rm -rf /var/lib/apt/lists/*
 
+# Install gog CLI (required by gog skill — Google Workspace: Gmail, Calendar, Drive, etc.)
+ARG GOG_VERSION=0.12.0
+RUN ARCH=$(dpkg --print-architecture) \
+  && curl -fsSL "https://github.com/steipete/gogcli/releases/download/v${GOG_VERSION}/gogcli_${GOG_VERSION}_linux_${ARCH}.tar.gz" \
+     | tar -xz -C /usr/local/bin gog \
+  && chmod +x /usr/local/bin/gog
+
 # Pin OpenClaw version for reproducible builds — bump explicitly when upgrading
 ARG OPENCLAW_VERSION=2026.3.8
 RUN npm install -g openclaw@${OPENCLAW_VERSION}
 
-# Install ClawHub CLI for skill management
-RUN npm install -g clawhub
+# Install ClawHub CLI for skill management and summarize CLI (required by summarize skill)
+RUN npm install -g clawhub @steipete/summarize
 
 # Create OpenClaw directories owned by node
 RUN mkdir -p /home/node/.openclaw/workspace /.clawhub \
