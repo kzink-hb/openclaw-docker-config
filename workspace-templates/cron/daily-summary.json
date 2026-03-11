@@ -1,0 +1,18 @@
+{
+  "name": "daily-summary",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 2 * * *",
+    "tz": "America/New_York"
+  },
+  "sessionTarget": "isolated",
+  "wakeMode": "now",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Daily summary time. Create a structured daily summary and clean up raw notes.\n\n## Steps\n\n1. **Determine yesterday's date** (this runs at 2 AM, so summarize the previous calendar day).\n\n2. **Read the raw daily notes:** `memory/YYYY-MM-DD.md` for yesterday's date.\n\n3. **Create a structured summary** at `summaries/daily/YYYY-MM-DD.md` with this format:\n```\n# Daily Summary — YYYY-MM-DD (Day of Week)\n\n## Work\n- Bullet points of tasks accomplished\n- Include PR numbers, ticket numbers, key decisions\n\n## Personal Projects\n- Bullet points of personal project work\n- Include repo names, features built\n\n## Conversations & Insights\n- Notable conversations\n- Key decisions made\n- Lessons learned\n\n## Metadata\n- Tools/skills installed or updated\n- Config changes\n- Cron jobs added/modified\n```\n\nOmit empty sections. Be concise but complete — this is the durable record.\n\n4. **Clean up the raw memory file:** After creating the summary, trim `memory/YYYY-MM-DD.md` down to just a one-line pointer: `# YYYY-MM-DD\\n\\nSummarized → summaries/daily/YYYY-MM-DD.md`\n   - Exception: if the raw file has in-progress items, keep those lines.\n\n5. **Also clean up raw files older than 7 days** that haven't been trimmed yet — same treatment (replace with pointer to their daily summary if one exists, otherwise leave them).\n\nIf no raw memory file exists for yesterday (quiet day), create a minimal summary noting it was a quiet day.",
+    "timeoutSeconds": 300
+  },
+  "delivery": {
+    "mode": "none"
+  }
+}
