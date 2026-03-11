@@ -60,10 +60,7 @@
   "plugins": {
     "entries": {
       "composio": {
-        "enabled": true,
-        "config": {
-          "consumerKey": "${COMPOSIO_CONSUMER_KEY}"
-        }
+        "enabled": true
       }
     }
   },

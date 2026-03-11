@@ -42,9 +42,6 @@ RUN npm install -g openclaw@${OPENCLAW_VERSION}
 # Install ClawHub CLI for skill management and summarize CLI (required by summarize skill)
 RUN npm install -g clawhub @steipete/summarize
 
-# Install Composio plugin (optional — activated by COMPOSIO_CONSUMER_KEY env var)
-RUN openclaw plugins install @composio/openclaw-plugin
-
 # Create OpenClaw directories owned by node
 RUN mkdir -p /home/node/.openclaw/workspace /.clawhub \
   && chown -R node:node /home/node/.openclaw /.clawhub
@@ -69,6 +66,9 @@ RUN if [ -n "$OPENCLAW_EXTENSIONS" ]; then \
     fi
 
 USER node
+
+# Install Composio plugin (optional — activated by COMPOSIO_CONSUMER_KEY env var)
+RUN openclaw plugins install @composio/openclaw-plugin
 
 # Container health check (added in OpenClaw 2026.3.1)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
