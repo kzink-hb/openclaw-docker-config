@@ -2,6 +2,9 @@
   "gateway": {
     "mode": "local",
     "port": 18789,
+    "auth": {
+      "allowTailscale": true
+    },
     "controlUi": {
       "allowInsecureAuth": true,
       "allowedOrigins": ["http://localhost:18789", "http://127.0.0.1:18789"]
