@@ -57,6 +57,17 @@
     }
   },
 
+  "plugins": {
+    "entries": {
+      "composio": {
+        "enabled": true,
+        "config": {
+          "consumerKey": "${COMPOSIO_CONSUMER_KEY}"
+        }
+      }
+    }
+  },
+
   "logging": {
     "level": "info",
     "consoleLevel": "info",
