@@ -3,15 +3,11 @@
 Template cron jobs for OpenClaw. Install via the CLI after deployment:
 
 ```bash
-# SSH to VPS
+# SSH to VPS, then use the oc alias to add cron jobs
 make ssh
-
-# Add a cron job from JSON
 oc cron add < ~/.openclaw/workspace/cron/daily-summary.json
 oc cron add < ~/.openclaw/workspace/cron/weekly-summary.json
 ```
-
-Or via `make ssh` and paste the `openclaw cron add` commands from each file's comments.
 
 ## Available Templates
 
